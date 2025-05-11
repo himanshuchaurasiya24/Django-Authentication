@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import RegexValidator
 
-# Create your models here.
 
 class CustomUser(AbstractUser):
     bio = models.TextField(blank=True, null=True)
@@ -10,7 +10,18 @@ class CustomUser(AbstractUser):
     youtube = models.URLField(blank=True, null=True)
     instagram = models.URLField(blank=True, null=True)
     twitter = models.URLField(blank=True, null=True)
-    username = models.CharField(max_length=20, unique=True)
+    username = models.CharField(
+        max_length=20,
+        unique=True,
+        validators=[
+            RegexValidator(
+                regex=r'^[a-z][a-zA-Z0-9]*$',  # Must start with a lowercase letter
+                message="Username must start with a lowercase letter and contain only letters and numbers."
+            )
+        ]
+    )
+
+
     def __str__(self):
         return self.username
     
